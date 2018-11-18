@@ -14,13 +14,9 @@ class Station
     trains.delete(train)
   end
 
-  def all_train_in_station
-    trains.each { |train| puts train.id }
-  end
-
   def trains_by_type(type)
-    trains.select { |train| train.type == type }.each do |train|
-      puts train.id
-    end
+    trains.select { |train| train.type == type }
   end
 end
+
+
