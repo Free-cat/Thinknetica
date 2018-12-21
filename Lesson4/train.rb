@@ -5,7 +5,7 @@ class Train
   def initialize(id, type)
     @id = id
     @type = type
-    @wagons_count = []
+    @wagons = []
     @speed = 0
   end
 
@@ -18,11 +18,11 @@ class Train
   end
 
   def add_wagon(wagon)
-    @wagons_count << wagon if speed.zero? && wagon.type == type
+    @wagons << wagon if speed.zero? && wagon.type == type
   end
 
   def delete_wagon
-    @wagons_count.delete_at(-1) if speed.zero? && wagons_count.size > 0
+    @wagons.delete_at(-1) if speed.zero? && wagons_count.size > 0
   end
 
   def route=(route)
