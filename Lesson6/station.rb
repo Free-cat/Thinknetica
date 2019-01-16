@@ -1,4 +1,7 @@
+require_relative 'instance_counter/instance_counter'
+
 class Station
+  include InstanceCounter
   attr_reader :name, :trains
 
   def initialize(name)
