@@ -7,6 +7,7 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
+    register_instance
   end
 
   def accept_train(train)
