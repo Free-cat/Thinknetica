@@ -82,7 +82,7 @@ class Main
       break if train_type.nil? || train_type == 0
       begin
         train_id = show_message("Введите ID поезда в формате (123-ab, abc-ab, abc12) или ENTER для завершения")
-        train_company_name = show_message("Введите производителя поезда или ENTER для завершения")
+        train_company_name = show_message("Введите производителя поезда")
         if train_type == 1
           train = PassengerTrain.new(train_id, train_company_name)
           puts "Пассажирский поезд c номером #{train.id} производителя #{train.company_name} успешно создан"
@@ -91,8 +91,6 @@ class Main
           train = CargoTrain.new(train_id, train_company_name)
           puts "Товарный поезд c номером #{train.id} производителя #{train.company_name} успешно создан"
           @trains << train
-        elsif train_id.nil? || train_company_name.nil?
-          return
         else
           puts "Ошибка ввода пункта меню"
         end
@@ -107,7 +105,6 @@ class Main
   def attach_wagon_to_train
     loop do
       show_train
-      puts "Выберете поезд"
       train_index = show_message("Выберете поезд или ENTER для завершения", true)
       break if train_index.nil?
       train = @trains[train_index]
@@ -198,7 +195,7 @@ class Main
 #Метод для добавления станций в маршрут
   def add_station_route(route)
     show_stations
-    station =  show_message("Выберете станцию для добавления", true)
+    station = show_message("Выберете станцию для добавления", true)
     if @stations[station]
       route.add_station(@stations[station])
       puts "Станция успешно добавлена"
