@@ -147,6 +147,12 @@ class Main
     end
   end
 
+  def show_train_with_route
+    @trains.each_with_index do |train, index|
+      puts "[#{index}] Поезд #{train.id} - количество вагон #{train.wagons.size} Производитель #{train.company_name}" unless train.current_station.nil?
+    end
+  end
+
   def show_stations
     @stations.each_with_index do |station, index|
       puts "[#{index}] Станция #{station.name}"
@@ -266,8 +272,10 @@ class Main
 #Перемещать поезд по маршруту вперед и назад
   def move_train
     puts "============Перемещение поезда по маршруту============"
-    show_train
-    train = @trains[show_message("Выберете поезд для перемещения", true)]
+    show_train_with_route
+    train_id = show_message("Выберете поезд для перемещения", true)
+    return if train_id.nil?
+    train = @trains[train_id]
     if train
       loop do
         puts "Поезд #{train.id} находится на станции #{train.current_station.name}"
@@ -283,6 +291,7 @@ class Main
       end
     end
   end
+
   def show_stations_with_train
     puts "Список станций и поездов на станции"
     show_stations

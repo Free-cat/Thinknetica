@@ -39,11 +39,7 @@ class Route
 
   protected
   def validate!
-    raise "Name can't be nil and blank" if name.nil?
-    raise "Name should be at least 3 symbols" if name.to_s.length < 3
-    raise "Start station can't be nil" if stations.first.nil?
-    raise "Start station can't be type Station" if stations.first.class.name != "Station"
-    raise "End station can't be nil" if stations.last.nil?
-    raise "End station can't be type Station" if stations.last.class.name != "Station"
+    raise "Station not Station class" unless stations.all? {|station| station.is_a?(Station)}
+    raise "Station's array is a small, minimum 2 station" if stations.length < 2
   end
 end
