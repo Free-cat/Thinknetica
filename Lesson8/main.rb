@@ -129,12 +129,12 @@ class Main
       begin
         wagon_company_name = show_message("Введите производителя вагона или ENTER для завершения")
         if train.type == "cargo"
-          wagon_capacity = show_message("Введите объем вагона или ENTER для завершения")
+          wagon_capacity = show_message("Введите объем вагона или ENTER для завершения").to_f
           wagon = CargoWagon.new(wagon_company_name, wagon_capacity)
           train.add_wagon(wagon)
           puts "Вагон производителя #{wagon.company_name} прицеплен к поезду #{train.id}"
         elsif train.type == "passenger"
-          seat_count = show_message("Введите количество мест в вагоне или ENTER для завершения")
+          seat_count = show_message("Введите количество мест в вагоне или ENTER для завершения").to_i
           wagon = PassengerWagon.new(wagon_company_name, seat_count)
           train.add_wagon(wagon)
           puts "Вагон производителя #{wagon.company_name} прицеплен к поезду #{train.id}"
