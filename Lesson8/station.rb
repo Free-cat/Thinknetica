@@ -20,7 +20,7 @@ class Station
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
@@ -40,15 +40,14 @@ class Station
     trains
   end
 
-  def train_block(&b)
-    trains.each{|train| b.call(train)}
+  def train_block
+    trains.each { |train| yield(train) }
   end
 
   protected
+
   def validate!
     raise "Name can't be nil and blank" if name.nil?
-    raise "Name should be at least 3 symbols" if name.to_s.length < 3
+    raise 'Name should be at least 3 symbols' if name.to_s.length < 3
   end
 end
-
-

@@ -8,7 +8,7 @@ class Train
   attr_reader :route
   @@trains = {}
 
-  TRAIN_ID_FORMAT = /^[a-zа-я\d]{3}(-)?[a-zа-я\d]{2}$/i
+  TRAIN_ID_FORMAT = /^[a-zа-я\d]{3}(-)?[a-zа-я\d]{2}$/i.freeze
 
   class << self
     def find(id)
@@ -23,19 +23,19 @@ class Train
     @speed = 0
     @company_name = company_name
     validate!
-    @@trains[id] = (self)
+    @@trains[id] = self
     register_instance
   end
 
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
-  def wagon_block(&b)
-    wagons.each_with_index { |wagon, index| b.call(wagon, index) }
+  def wagon_block
+    wagons.each_with_index { |wagon, index| yield(wagon, index) }
   end
 
   def print_wagons_info
@@ -55,7 +55,7 @@ class Train
   end
 
   def delete_wagon
-    @wagons.delete_at(-1) if speed.zero? && wagons_count.size > 0
+    @wagons.delete_at(-1) if speed.zero? && !wagons_count.empty?
   end
 
   def route=(route)
@@ -93,10 +93,11 @@ class Train
   end
 
   protected
+
   def validate!
     raise "ID can't be nil and blank" if id.nil?
     raise "Type can't be nil" if type.nil? || type == ''
     raise "Company_name can't be nil and blank" if company_name.nil? || company_name == ''
-    raise "ID Format Error, example: (123-ab, abc-ab, abc12 etc..)" if id !~ TRAIN_ID_FORMAT
+    raise 'ID Format Error, example: (123-ab, abc-ab, abc12 etc..)' if id !~ TRAIN_ID_FORMAT
   end
 end

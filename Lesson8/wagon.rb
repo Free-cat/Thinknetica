@@ -15,11 +15,12 @@ class Wagon
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
   protected
+
   def validate!
     raise "Type can't be nil" if type.nil? || type == ''
     raise "Company_name can't be nil and blank" if company_name.nil? || company_name == ''
