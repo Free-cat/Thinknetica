@@ -20,7 +20,7 @@ class PassengerWagon < Wagon
   end
 
   def validate_passenger!
-    raise 'Количество мест может быть только целочисленым значением' unless capacity.is_a?(Integer)
+    raise 'Capacity only integer' unless capacity.is_a?(Integer)
   end
 
   def valid?

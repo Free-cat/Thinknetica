@@ -22,7 +22,7 @@ class Wagon
   protected
 
   def validate!
-    raise "Type can't be nil" if type.nil? || type == ''
-    raise "Company_name can't be nil and blank" if company_name.nil? || company_name == ''
+    raise "Type can't be nil" if type.blank?
+    raise "Company_name can't be nil and blank" if company_name.blank?
   end
 end

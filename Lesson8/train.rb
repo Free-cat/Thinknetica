@@ -39,7 +39,9 @@ class Train
   end
 
   def print_wagons_info
-    wagon_block { |wagon, index| "- #{index}, #{wagon.type}, Свободно: #{wagon.free_capacity}, Занято: #{wagon.occupied_capacity}" }
+    wagon_block do |w, i|
+      "- #{i}, #{w.type}, #{w.free_capacity}, #{w.occupied_capacity}"
+    end
   end
 
   def stop
@@ -55,7 +57,7 @@ class Train
   end
 
   def delete_wagon
-    @wagons.delete_at(-1) if speed.zero? && !wagons_count.empty?
+    @wagons.delete_at(-1) if speed.zero? && !wagons.empty?
   end
 
   def route=(route)
@@ -65,19 +67,11 @@ class Train
   end
 
   def station_up
-    if next_station
-      current_station.direct_train(self)
-      @current_station_index += 1
-      current_station.accept_train(self)
-    end
+    station_up_process if next_station
   end
 
   def station_down
-    if prev_station
-      current_station.direct_train(self)
-      @current_station_index -= 1
-      current_station.accept_train(self)
-    end
+    station_down_process if prev_station
   end
 
   def current_station
@@ -85,7 +79,7 @@ class Train
   end
 
   def prev_station
-    route.stations[@current_station_index - 1] if route && @current_station_index >= 1
+    prev_station_process if route && @current_station_index >= 1
   end
 
   def next_station
@@ -96,8 +90,28 @@ class Train
 
   def validate!
     raise "ID can't be nil and blank" if id.nil?
-    raise "Type can't be nil" if type.nil? || type == ''
-    raise "Company_name can't be nil and blank" if company_name.nil? || company_name == ''
-    raise 'ID Format Error, example: (123-ab, abc-ab, abc12 etc..)' if id !~ TRAIN_ID_FORMAT
+    raise "Type can't be nil" if type.blank?
+    raise "Company_name can't be nil and blank" if company_name.blank?
+    raise 'ID Format Error' if id !~ TRAIN_ID_FORMAT
+  end
+
+  def check_blank?(value)
+    value.nil? || value == ''
+  end
+
+  def station_down_process
+    current_station.direct_train(self)
+    @current_station_index -= 1
+    current_station.accept_train(self)
+  end
+
+  def station_up_process
+    current_station.direct_train(self)
+    @current_station_index += 1
+    current_station.accept_train(self)
+  end
+
+  def prev_station_process
+    route.stations[@current_station_index - 1]
   end
 end

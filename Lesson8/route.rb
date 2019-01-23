@@ -40,7 +40,9 @@ class Route
   protected
 
   def validate!
-    raise 'Station not Station class' unless stations.all? { |station| station.is_a?(Station) }
+    unless stations.all? { |station| station.is_a?(Station) }
+      raise 'Station not Station class'
+    end
     raise "Station's array is a small, minimum 2 station" if stations.length < 2
   end
 end

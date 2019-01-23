@@ -14,7 +14,9 @@ class CargoWagon < Wagon
   end
 
   def take_capacity(capacity_to_place)
-    raise 'Все место в вагоне уже занято' if (occupied_capacity + capacity_to_place) > capacity
+    if (occupied_capacity + capacity_to_place) > capacity
+      raise 'Все место в вагоне уже занято'
+    end
 
     @occupied_capacity += capacity_to_place
   end
