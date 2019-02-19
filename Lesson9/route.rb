@@ -1,22 +1,20 @@
 require_relative 'instance_counter/instance_counter'
+require_relative 'modules/validation'
 
 class Route
+  include Validation
   include InstanceCounter
   attr_accessor :stations
   attr_reader :name
+
+  validate :stations, :type, Station
+  validate :stations, :length, 2
 
   def initialize(name, start_station, end_station)
     @name = name
     @stations = [start_station, end_station]
     validate!
     register_instance
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   def add_station(station)
@@ -35,14 +33,5 @@ class Route
     stations.each_with_index do |station, index|
       puts "#{index}: #{station.name}"
     end
-  end
-
-  protected
-
-  def validate!
-    unless stations.all? { |station| station.is_a?(Station) }
-      raise 'Station not Station class'
-    end
-    raise "Station's array is a small, minimum 2 station" if stations.length < 2
   end
 end

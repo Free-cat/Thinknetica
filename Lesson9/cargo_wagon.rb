@@ -1,34 +1,28 @@
+require_relative 'modules/accessors'
+
 class CargoWagon < Wagon
+  extend Accessors
   attr_accessor :capacity
-  attr_reader :occupied_capacity
+  attr_accessor_with_history :occupied_capacity
+
+  validate :capacity, :type, Numeric
 
   def initialize(company_name, capacity)
     super('cargo', company_name)
     @capacity = capacity
-    @occupied_capacity = 0
-    validate_cargo!
+    self.occupied_capacity = 0
+    validate!
   end
 
   def free_capacity
-    capacity - occupied_capacity
+    capacity - self.occupied_capacity
   end
 
   def take_capacity(capacity_to_place)
-    if (occupied_capacity + capacity_to_place) > capacity
+    if (occupied_capacity.to_i + capacity_to_place) > capacity
       raise 'Все место в вагоне уже занято'
     end
 
-    @occupied_capacity += capacity_to_place
-  end
-
-  def validate_cargo!
-    raise 'Объем может быть только числом' unless capacity.is_a?(Numeric)
-  end
-
-  def valid?
-    validate_cargo!
-    true
-  rescue StandardError
-    false
+    self.occupied_capacity += capacity_to_place
   end
 end

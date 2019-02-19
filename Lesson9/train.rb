@@ -1,14 +1,21 @@
 require_relative 'company_name/company_name'
 require_relative 'instance_counter/instance_counter'
+require_relative 'modules/validation'
 
 class Train
+  include Validation
   include CompanyName
   include InstanceCounter
   attr_accessor :id, :type, :wagons, :speed
   attr_reader :route
+
+  validate :id, :presence
+  validate :type, :presence
+  validate :company_name, :presence
+  validate :id, :format, /^[a-zа-я\d]{3}(-)?[a-zа-я\d]{2}$/i.freeze
   @@trains = {}
 
-  TRAIN_ID_FORMAT = /^[a-zа-я\d]{3}(-)?[a-zа-я\d]{2}$/i.freeze
+  # TRAIN_ID_FORMAT = /^[a-zа-я\d]{3}(-)?[a-zа-я\d]{2}$/i.freeze
 
   class << self
     def find(id)
@@ -25,13 +32,6 @@ class Train
     validate!
     @@trains[id] = self
     register_instance
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   def wagon_block
@@ -87,17 +87,6 @@ class Train
   end
 
   protected
-
-  def validate!
-    raise "ID can't be nil and blank" if id.nil?
-    raise "Type can't be nil" if type.blank?
-    raise "Company_name can't be nil and blank" if company_name.blank?
-    raise 'ID Format Error' if id !~ TRAIN_ID_FORMAT
-  end
-
-  def check_blank?(value)
-    value.nil? || value == ''
-  end
 
   def station_down_process
     current_station.direct_train(self)

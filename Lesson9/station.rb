@@ -1,8 +1,13 @@
 require_relative 'instance_counter/instance_counter'
+require_relative 'modules/validation'
 
 class Station
+  include Validation
   include InstanceCounter
   attr_reader :name, :trains
+
+  validate :name, :presence
+  validate :name, :length, 3
 
   @@stations = []
   def self.all
@@ -15,13 +20,6 @@ class Station
     validate!
     @@stations << self
     register_instance
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   def accept_train(train)
@@ -42,12 +40,5 @@ class Station
 
   def train_block
     trains.each { |train| yield(train) }
-  end
-
-  protected
-
-  def validate!
-    raise "Name can't be nil and blank" if name.nil?
-    raise 'Name should be at least 3 symbols' if name.to_s.length < 3
   end
 end
