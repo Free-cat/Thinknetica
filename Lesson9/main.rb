@@ -75,7 +75,8 @@ class Main
     proc do |wagon, index|
       puts "- - #{index}, #{wagon.type}, " \
            "Свободно: #{wagon.free_capacity}, " \
-           "Занято: #{wagon.occupied_capacity}"
+           "Занято: #{wagon.occupied_capacity}, " \
+           "История занятого места: #{wagon.occupied_capacity_history}"
     end
   end
 
